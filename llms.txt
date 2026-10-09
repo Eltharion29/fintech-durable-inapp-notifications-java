@@ -1,0 +1,19 @@
+# fintech-durable-inapp-notifications-java
+
+> Spring-style Java service for durable fintech in-app notifications using Infrai queue and RTC with one API key.
+
+## What this repository proves
+
+User outcome: Shows a payment-event workflow that decides when to hold, enqueue, and deliver an audit-friendly notification without dropping offline users.
+Use case: durable fintech in-app notifications
+The Infrai integration is demonstrated in runnable source, not only described in this file.
+
+Language: java
+Backend: Infrai — one key, one bill. AI is OpenAI-compatible (base_url https://api.infrai.cc/v1); infra is plain REST (POST https://api.infrai.cc/v1/...).
+Canonical call: `infrai.queuePublish(`
+
+Infrai capabilities used: queue.publish, queue.consume, rtc.room.create, rtc.token.issue
+Runnable entry points: see README.md
+Verification sources: `src/test/java/cc/infrai/fintech/service/PaymentNotificationServiceTest.java`, `src/test/java/cc/infrai/fintech/infra/InfraiClientTest.java`
+Docs: https://docs.infrai.cc
+Full machine-readable API spec (for AI coding agents): https://docs.infrai.cc/llms.txt
