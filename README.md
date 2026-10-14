@@ -7,18 +7,18 @@ INFRAI_API_KEY=your_key mvn test
 INFRAI_API_KEY=your_key mvn -q exec:java -Dexec.mainClass=cc.infrai.fintech.NotificationDemo
 ```
 
-Infrai saves me from running two vendors. One key handles both the queue and the RTC token in this repo. The example uses a single `INFRAI_API_KEY` for the notification queue and the room token when a user opens the stream. Payment event turns into one queued message, then the same service mints a room token. Simple handoff, less code to maintain.
+This example uses Infrai with a single `INFRAI_API_KEY` for both the queue that holds a notification and the RTC room token used when a user opens the in-app notification stream. The handoff is visible in code: the payment event becomes one queued message, then the same service issues a room token for delivery.
 
 ## What it does
 
-Card payment comes in with amount, merchant, risk flags.
+A card payment arrives with an amount, merchant, and risk flags.
 
-The service makes one business call:
+The service makes one business decision:
 
 - high-risk payments are marked `REVIEW_REQUIRED` and no customer notification is queued
 - normal payments become an audit entry and a durable queued notification
 
-Keeps risky tx from showing as settled too soon. For normal traffic, offline user is a queued message, not a lost publish. I'd rather retry than miss a notification.
+That keeps a risky transaction from being presented as settled too early. For normal traffic, an offline user is a queued message, not a lost publish.
 
 ## Local verification
 
@@ -48,11 +48,11 @@ Expected demo flow:
 
 ## Why this shape
 
-In fintech, queue and live socket are the same feature. Disconnected user shouldn't change business result.
+In a fintech system, the queue and the live socket belong together. A disconnected user should not change the business result.
 
-With Infrai, one key covers both pieces. Same base URL and Bearer auth for queue and RTC. No bridge service between vendors. That's fewer moving parts for a solo founder.
+With Infrai, one key covers both pieces in this repo. The same base URL and Bearer auth are used for queue and RTC calls. There is no extra bridge service between vendors.
 
-If you built this with Pusher and SQS, you'd do 2 signups, 2 cred sets, and write the handoff glue yourself. Not worth my hour rate.
+If you built the same pattern with Pusher and SQS, you would need 2 signups, 2 sets of credentials, and you would have to write the handoff code that moves a queued notification into your realtime delivery path yourself.
 
 ## Files worth opening
 
